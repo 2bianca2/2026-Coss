@@ -5,7 +5,7 @@
  *   변환하고, ADC_vect 안에서 곧바로 CH2 변환을 이어서 시작한다 - 그래서
  *   Timer1 주기 = "채널당" 샘플 주기가 되고(반토막 안 남), 두 채널은 ADC 변환
  *   한 번(~수십us) 정도의 시간차만 두고 거의 같은 순간을 잰다.
- *   10bit(ADLAR=0, ADCL 먼저 + ADCH, 0~1023)로 정상모드(prescaler 128) 고정 - §2.1 참고
+ *   10bit(ADLAR=0, ADCL 먼저 + ADCH, 0~1023) 우측정렬 모드로 고정.
  */
 #ifndef ADC_H
 #define ADC_H
@@ -13,10 +13,8 @@
 #include <stdint.h>
 
 #define ADC_BUFFER_SIZE 96     // 화면에 보여주는 샘플 수 (waveform/grid의 컬럼 수와 1:1)
-                                // 64->96(1.5배)으로 늘려서 같은 T/DIV에서 샘플레이트도 1.5배로
-                                // 올라감(나이퀴스트 여유 증가) - SRAM 최적화(PROGMEM 전환)로 확보한
-                                // 여유(1337B)로 감당 가능해서 늘림. FFT(fft.h, FFT_N=64)는 2의
-                                // 거듭제곱이 필요해서 독립적으로 유지 - 96개 중 앞 64개만 씀.
+                                // FFT(fft.h, FFT_N=64)는 2의 거듭제곱이 필요해서 독립적으로
+                                // 유지 - 96개 중 앞 64개만 씀.
 #define ADC_TRIGGER_MARGIN 128 // 트리거(제로크로싱) 찾을 여유분으로 앞에 더 캡처해두는 샘플 수
 #define ADC_CAPTURE_SIZE (ADC_BUFFER_SIZE + ADC_TRIGGER_MARGIN) // 실제 raw 캡처 버퍼 크기(224)
 #define ADC_MAX_VALUE 1023 // 10bit 최댓값
@@ -51,7 +49,7 @@ void adc_set_time_div(uint8_t time_div_idx);
 // 현재 채널당 샘플링레이트(Hz) - FREQ/PERIOD 계산(statusbar.c)에서 씀
 uint16_t adc_get_sample_rate(void);
 
-// raw(0~1023) -> mV. 프론트엔드가 -5V~+5V 입력을 0~5V(2.5V=0V 기준)로 분배했다는 전제 (§13)
+// raw(0~1023) -> mV. 프론트엔드가 -5V~+5V 입력을 0~5V(2.5V=0V 기준)로 분배했다는 전제.
 // CH1/CH2 프론트엔드가 동일한 분배회로라는 전제로 두 채널 다 이 식 하나를 씀.
 int32_t adc_raw_to_mv(uint16_t raw);
 

@@ -28,14 +28,14 @@
 
 #define MEASURE_ITEM_COUNT 6   // RMS, MAX, MIN, FFT, FREQ, PERIOD
 #define MEASURE_FFT_IDX 3      // MEASURE_NAMES(ui.c)에서 "FFT"의 인덱스 - 채널 하나만 켜진
-                                // 전체화면일 때만 실제 스펙트럼 그래프로 바뀜(main.c 참고)
+                                // 전체화면일 때만 실제 스펙트럼 그래프로 바뀜(app.c 참고)
 #define VOLT_DIV_TABLE_SIZE 10 // volt_div_idx가 가리키는 표의 칸 수 (statusbar.c 표와 짝)
 #define TIME_DIV_TABLE_SIZE 12 // time_div_idx가 가리키는 표의 칸 수 - V/DIV보다 넓은 범위(us~s)가 필요해서 따로 둠
 
 // volt_div_idx / time_div_idx 각 칸이 실제로 뜻하는 값.
 // statusbar.c(표시 문자열), waveform.c(세로 스케일), adc.c(샘플링레이트/가로 시간축)가
 // 전부 이 순서를 그대로 따라간다 - 하나만 바꾸면 다 같이 틀어지니 인덱스 순서 유지 필수.
-// PROGMEM(플래시)에 있음 - 읽을 땐 pgm_read_word()/pgm_read_dword() 써야 함(§9.1, SRAM 절약).
+// PROGMEM(플래시)에 있음 - 읽을 땐 pgm_read_word()/pgm_read_dword() 써야 함(SRAM 절약).
 extern const uint16_t VOLT_PER_DIV_MV[VOLT_DIV_TABLE_SIZE] PROGMEM;
 extern const uint32_t TIME_PER_DIV_US[TIME_DIV_TABLE_SIZE] PROGMEM; // us 단위(200us~1s까지 표현하려고 ms 대신 us로 통일)
 
@@ -55,8 +55,8 @@ typedef struct {
     uint8_t measure_selected[2]; // [0]=CH1, [1]=CH2 - 각자 확정된 항목
 
     // SW1 롱프레스로 토글. 켜져있으면(기본값) 자동 트리거(제로크로싱 탐색+실패시 폴백)가
-    // 동작해서 화면이 고정돼 보이고, 끄면 트리거 없이 그냥 매 프레임 최신 구간을 보여줘서
-    // (원래 트리거 없던 동작) 화면이 흘러다님. 상태바에 OFF/TRIG/SEARCH로 항상 표시됨.
+    // 동작해서 화면이 고정돼 보이고, 끄면 트리거 없이 매 프레임 최신 구간을 그대로 보여줘서
+    // 화면이 흘러다닌다. 상태바에 OFF/TRIG/SEARCH로 항상 표시됨.
     uint8_t trigger_enabled;
 } ui_state_t;
 

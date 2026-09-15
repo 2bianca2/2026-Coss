@@ -2,7 +2,7 @@
 #include "text.h"
 #include "display.h"
 
-// 상수 테이블이라 PROGMEM 필수 (§9.1 - 안 그러면 SRAM에도 중복 저장됨)
+// 상수 테이블이라 PROGMEM 필수 (안 그러면 SRAM에도 중복 저장됨)
 static const uint8_t font5x7[][5] PROGMEM = {
     {0x00, 0x00, 0x00, 0x00, 0x00}, // 0: Space
     {0x3E, 0x51, 0x49, 0x45, 0x3E}, // 1: 0

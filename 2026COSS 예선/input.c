@@ -19,8 +19,8 @@ uint16_t input_pressed_edges(uint16_t prev_stable, uint16_t curr_stable)
 // 그레이코드 전이표: 이전 상태(2비트) -> 현재 상태(2비트)로 가는 16가지 조합 중
 // 유효한 8가지(CW 4개, CCW 4개)만 ±1이고 나머지(제자리/바운스/불가능한 전이)는 0.
 // idx = (prev_state << 2) | cur_state, state = (CLK<<1) | DT
-// PROGMEM(플래시)에 둠(§9.1, SRAM 절약) - poll마다 읽히는 핫패스지만 1바이트 테이블
-// 조회라 pgm_read_byte 오버헤드(몇 사이클)는 무시할 만함.
+// PROGMEM(플래시)에 둠(SRAM 절약) - poll마다 읽히는 핫패스지만 1바이트 테이블 조회라
+// pgm_read_byte 오버헤드(몇 사이클)는 무시할 만함.
 static const int8_t QUAD_TRANSITION[16] PROGMEM = {
      0, -1, +1,  0,
     +1,  0,  0, -1,

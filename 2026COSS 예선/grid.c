@@ -5,13 +5,13 @@ const scope_region_t REGION_FULL     = { GRID_TOP, LCD_HEIGHT - 1, GRID_V_DIVS_F
 const scope_region_t REGION_CH1_HALF = { GRID_TOP, REGION_CH1_HALF_Y1, GRID_V_DIVS_HALF };
 const scope_region_t REGION_CH2_HALF = { DIVIDER_Y1 + 1, LCD_HEIGHT - 1, GRID_V_DIVS_HALF };
 
-// 가로선은 화면 전체 폭 기준이라 region과 상관없이 위치가 고정됨
+// 세로선(x좌표)은 화면 전체 폭 기준이라 region과 상관없이 위치가 고정됨
 static uint16_t vline_x(uint8_t k)
 {
     return (uint16_t)((uint32_t)k * (LCD_WIDTH - 1) / GRID_H_DIVS);
 }
 
-// 세로선은 region의 y0..y1 안에서 v_divs 칸으로 나눔
+// 가로선(y좌표)은 region의 y0..y1 안에서 v_divs 칸으로 나눔
 static uint16_t hline_y(const scope_region_t *r, uint8_t k)
 {
     return (uint16_t)(r->y0 + (uint32_t)k * (r->y1 - r->y0) / r->v_divs);

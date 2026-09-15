@@ -1,7 +1,7 @@
 #include "ui.h"
 #include "hc165.h"
 
-// 각 이름은 플래시(PROGMEM)에 두고, 포인터 배열 자체도 PROGMEM에 둠(§9.1) - 그래서
+// 각 이름은 플래시(PROGMEM)에 두고, 포인터 배열 자체도 PROGMEM에 둠 - 그래서
 // 읽을 땐 pgm_read_word()로 배열에서 포인터부터 꺼낸 다음 그 포인터로 문자열을 읽는다
 // (ui_measure_name() 참고). statusbar.c의 VOLT_DIV_STR/TIME_DIV_STR도 같은 패턴.
 static const char MNAME_0[] PROGMEM = "RMS";
@@ -16,9 +16,7 @@ static const char *const MEASURE_NAMES[MEASURE_ITEM_COUNT] PROGMEM = {
 
 // 표시 문자열(statusbar.c)과 짝이 맞는 실제 값들. PROGMEM(플래시)에 둠 - 읽을 땐
 // pgm_read_word()/pgm_read_dword() 필요(adc.c/waveform.c 사용부 참고).
-// 입력 신호가 -5V~+5V(10Vpp) 고정이라, 그 범위에서 실제로 쓸모 있는 값들로만 구성
-// (예전엔 5mV~50mV 구간이 있었는데, 그 정도면 항상 화면 끝에 클리핑돼서 조절해도
-//  아무 변화가 안 보였음 - 그래서 전부 -5~5V 기준으로 의미 있는 값으로 다시 잡음)
+// 입력 신호가 -5V~+5V(10Vpp) 고정이라, 그 범위에서 실제로 쓸모 있는 값들로만 구성.
 const uint16_t VOLT_PER_DIV_MV[VOLT_DIV_TABLE_SIZE] PROGMEM = {
     100, 200, 300, 500, 700, 1000, 1500, 2000, 3000, 5000
 };
@@ -63,7 +61,7 @@ void ui_init(ui_state_t *ui)
     ui->measure_menu_idx[1] = 0;
     ui->measure_selected[0] = 0;
     ui->measure_selected[1] = 0;
-    ui->trigger_enabled = 1; // 기본은 자동 트리거 켜짐(지금까지 하던 동작)
+    ui->trigger_enabled = 1; // 기본은 자동 트리거 켜짐
 }
 
 void ui_update(ui_state_t *ui, uint16_t pressed, int8_t ch1_delta, int8_t ch2_delta)

@@ -22,7 +22,7 @@
 #define TRIG_STATUS_X 340 // ROW1(전역줄)의 T:xxx(x=260) 뒤 여유 공간
 #define TRIG_STATUS_W 60  // "SEARCH" 기준 폭 - 지우기용
 
-// 문자열 리터럴은 PROGMEM 없이 그냥 const로만 두면 AVR에서도 SRAM에 중복 저장됨(§9.1) -
+// 문자열 리터럴은 PROGMEM 없이 그냥 const로만 두면 AVR에서도 SRAM에 중복 저장됨 -
 // 각 문자열은 물론 포인터 배열(VOLT_DIV_STR/TIME_DIV_STR 자체)도 PROGMEM에 둠. 그래서 쓸 땐
 // pgm_read_word()로 배열에서 포인터부터 꺼낸 다음, strncpy_P()로 필요한 문자열만 잠깐 SRAM
 // 버퍼에 복사해 씀 (draw_channel_row/statusbar_draw_full 참고).
@@ -149,7 +149,7 @@ static void format_measure_value(const ui_state_t *ui, uint8_t ch_idx, const vol
 {
     switch (sel_idx) {
         case MEASURE_FFT_IDX: {
-            // 실제 스펙트럼 그래프는 main.c가 그래프 영역에 그림(spectrum.c) - 여긴 상태 텍스트만.
+            // 실제 스펙트럼 그래프는 app.c가 그래프 영역에 그림(spectrum.c) - 여긴 상태 텍스트만.
             // 채널 하나만 켜진 전체화면일 때만 그래프가 실제로 뜸(ui.h 주석 참고).
             uint8_t single_ch = (ui->ch1_enabled != ui->ch2_enabled);
             snprintf_P(out, out_size, single_ch ? PSTR("FFT:GRAPH") : PSTR("FFT:N/A(1CH)"));

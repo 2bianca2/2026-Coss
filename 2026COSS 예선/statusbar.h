@@ -10,7 +10,7 @@
 #include <stdint.h>
 #include "ui.h"
 
-// adc_buf1/adc_buf2: 지금 화면에 그리고 있는 채널별 64샘플 버퍼(트리거 오프셋 반영된 포인터).
+// adc_buf1/adc_buf2: 지금 화면에 그리고 있는 채널별 샘플 버퍼(트리거 오프셋 반영된 포인터).
 // measure 값(RMS/MAX/MIN/FREQ/PERIOD)을 이 값으로 계산해서 그래프랑 항상 일치시킨다.
 void statusbar_draw_full(const ui_state_t *ui, const volatile uint16_t *adc_buf1, const volatile uint16_t *adc_buf2);
 

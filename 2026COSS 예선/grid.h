@@ -12,7 +12,7 @@
 #define STATUS_BAR_H 38   // 상태바 높이(px) - 3줄(전역상태 + CH1 + CH2, 각 7px 폰트 + 여백)
 #define GRID_TOP     STATUS_BAR_H
 
-#define GRID_H_DIVS      20  // 가로 칸 수 (촘촘하게: 10->20)
+#define GRID_H_DIVS      20  // 가로 칸 수
 #define GRID_V_DIVS_FULL 12  // 전체화면일 때 세로 칸 수
 #define GRID_V_DIVS_HALF 6   // 분할화면(반쪽)일 때 세로 칸 수 - 칸 픽셀 크기가 전체화면과 비슷하게 맞춤
 

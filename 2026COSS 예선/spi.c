@@ -1,7 +1,7 @@
 /*
  * spi.c - ATmega128 hardware SPI master driver
  * Mode 0 (CPOL=0, CPHA=0), F_CPU/4 clock.
- * Shared by hc165.c (read) and, later, the ILI9488 LCD driver (write).
+ * Shared by hc165.c (read) and display.c, the ILI9488 LCD driver (write).
  */
 #include <avr/io.h>
 #include "spi.h"

@@ -48,8 +48,8 @@ static uint16_t col_x(uint8_t i)
                      // "바뀜"으로 잡혀 메인루프가 거의 계속 그리기에 묶여버림(버튼 다 씹힘)
 
 // prev_x..x 사이를 몇 단계로 나눠 선형보간해서 대각선에 가깝게 그린다(고정 SPI 비용).
-// (예전엔 prev_x..x, y0..y1을 통째로 사각형 채우기 해서, 값이 확 튀는 구간에서
-//  대각선이 아니라 두꺼운 세로 블록/계단처럼 보였음)
+// 사각형 하나로 통째로 채우면 값이 확 튀는 구간에서 대각선이 아니라 두꺼운 세로
+// 블록처럼 보이기 때문.
 static void draw_diagonal_segment(uint16_t prev_x, uint16_t prev_y, uint16_t x, uint16_t y,
                                    uint16_t lo, uint16_t hi, uint8_t r, uint8_t g, uint8_t b)
 {

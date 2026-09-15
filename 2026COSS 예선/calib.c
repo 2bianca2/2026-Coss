@@ -43,9 +43,8 @@ static void render(void)
     snprintf_P(title, sizeof(title), PSTR("CH%d CALIBRATION"), active_ch + 1);
     lcd_draw_string(20, 30, title, COLOR_YELLOW);
 
-    // 문자열들은 PSTR()로 플래시에 두고 lcd_draw_string_P()로 그림(§9.1, SRAM 절약).
-    // sw_name/line2처럼 런타임에 조립하지 않고 SW3/SW4 두 경우를 아예 별도 리터럴로
-    // 나눠서 PSTR() 안에서 바로 고르게 함 - snprintf 안 거쳐도 되니 더 단순함.
+    // 문자열들은 PSTR()로 플래시에 두고 lcd_draw_string_P()로 그림(SRAM 절약). SW3/SW4
+    // 두 경우를 런타임 조립 없이 별도 리터럴로 나눠서 PSTR() 안에서 바로 고름.
     switch (state) {
         case CAL_WAIT_GND:
             lcd_draw_string_P(20, 60, PSTR("STEP 1/2: CONNECT GND TO INPUT"), COLOR_WHITE);

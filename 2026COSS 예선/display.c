@@ -1,5 +1,5 @@
 /*
- * display.c - ILI9488 최소 구동 드라이버 (1단계: 초기화 + 채우기)
+ * display.c - ILI9488 구동 드라이버.
  */
 #include <avr/io.h>
 #include <util/delay.h>
@@ -85,7 +85,7 @@ void lcd_init(void)
     _delay_ms(120);
 
     lcd_write_cmd(0x3A); // Pixel Format Set
-    lcd_write_data(0x66); // 18bit/pixel (우리가 확인했던 SPI모드 제약)
+    lcd_write_data(0x66); // 18bit/pixel
 
     lcd_write_cmd(0x36); // Memory Access Control (화면 방향/스캔 순서)
     // 패널 네이티브가 320(폭)x480(높이) 세로라서, MV비트(0x20)로 90도 돌려서
@@ -94,7 +94,7 @@ void lcd_init(void)
     // 빨강<->파랑, 노랑<->시안이 서로 뒤바뀌어 나옴 (예: NAVY가 파란색 대신 빨간색으로 보임)
     lcd_write_data(0x20);
 
-    lcd_write_cmd(0x21); // Display Inversion ON (리뷰에서 이 모듈은 이게 필요하다고 함)
+    lcd_write_cmd(0x21); // Display Inversion ON - 이 패널은 반전 없이는 색이 뒤집혀 나옴
     // 색이 반대로 나오면 이 줄을 지우거나 0x20(Inversion OFF)으로 바꿔보세요.
 
     lcd_write_cmd(0x29); // Display ON
