@@ -1,0 +1,16 @@
+# Atmel Studio / AVR-GCC build output
+Debug/
+Release/
+*.o
+*.d
+*.elf
+*.hex
+*.eep
+*.map
+*.lss
+*.srec
+*.bin
+
+# Atmel Studio IDE files
+*.cproj.user
+.vs/
