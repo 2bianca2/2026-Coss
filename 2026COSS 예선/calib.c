@@ -43,8 +43,6 @@ static void render(void)
     snprintf_P(title, sizeof(title), PSTR("CH%d CALIBRATION"), active_ch + 1);
     lcd_draw_string(20, 30, title, COLOR_YELLOW);
 
-    // 문자열들은 PSTR()로 플래시에 두고 lcd_draw_string_P()로 그림(SRAM 절약). SW3/SW4
-    // 두 경우를 런타임 조립 없이 별도 리터럴로 나눠서 PSTR() 안에서 바로 고름.
     switch (state) {
         case CAL_WAIT_GND:
             lcd_draw_string_P(20, 60, PSTR("STEP 1/2: CONNECT GND TO INPUT"), COLOR_WHITE);
@@ -71,7 +69,6 @@ void calib_init(void)
         eeprom_read_block((void *)zero_raw, (const void *)ee_calib.zero_raw, sizeof(zero_raw));
         eeprom_read_block((void *)ref_raw, (const void *)ee_calib.ref_raw, sizeof(ref_raw));
     } else {
-        // 미보정 상태: zero==ref로 둬서 has_calib()이 false가 되게 함
         zero_raw[0] = zero_raw[1] = 0;
         ref_raw[0] = ref_raw[1] = 0;
     }
@@ -80,7 +77,7 @@ void calib_init(void)
 int32_t calib_raw_to_mv(uint8_t ch_idx, uint16_t raw)
 {
     if (!has_calib(ch_idx))
-        return adc_raw_to_mv(raw); // 보정 전엔 기존 이상적 계산식 그대로
+        return adc_raw_to_mv(raw);
 
     int32_t span = (int32_t)ref_raw[ch_idx] - (int32_t)zero_raw[ch_idx];
     return ((int32_t)raw - (int32_t)zero_raw[ch_idx]) * 5000L / span;

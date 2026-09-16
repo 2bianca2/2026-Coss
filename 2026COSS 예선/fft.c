@@ -1,11 +1,10 @@
 #include <avr/pgmspace.h>
 #include "fft.h"
-#include "calib.h" // calib_raw_to_mv()
+#include "calib.h"
 
-#define FFT_STAGES 6 // log2(FFT_N) = log2(64)
+#define FFT_STAGES 6 // log2(FFT_N)
 
-// W_N^k = cos(-2*pi*k/N) + j*sin(-2*pi*k/N), k=0..FFT_N/2-1, Q15 고정소수점(±32767=±1.0).
-// FFT_N=64 기준으로 미리 계산해둔 값 - PROGMEM(플래시)에 둬서 SRAM을 안 먹게 함.
+// W_N^k = cos(-2*pi*k/N) + j*sin(-2*pi*k/N), Q15 고정소수점(±32767=±1.0), PROGMEM.
 static const int16_t FFT_COS[FFT_BINS] PROGMEM = {
     32767, 32609, 32137, 31356, 30273, 28898, 27245, 25329,
     23170, 20787, 18204, 15446, 12539, 9512, 6393, 3212,
@@ -19,7 +18,7 @@ static const int16_t FFT_SIN[FFT_BINS] PROGMEM = {
     -23170, -20787, -18204, -15446, -12539, -9512, -6393, -3212
 };
 
-// CH1/CH2 공용 작업버퍼(한 번에 한 채널만 계산 - fft.h 주석 참고)
+// CH1/CH2 공용 작업버퍼 - 한 번에 한 채널만 계산.
 static int16_t work_re[FFT_N];
 static int16_t work_im[FFT_N];
 
@@ -45,7 +44,6 @@ static void bit_reverse(void)
     }
 }
 
-// 정수 제곱근(이진 탐색) - statusbar.c의 isqrt32()와 같은 방식, 크기 진폭 계산용
 static uint32_t isqrt32(uint32_t v)
 {
     uint32_t res = 0;
@@ -66,18 +64,17 @@ static uint32_t isqrt32(uint32_t v)
 void fft_compute_magnitude(uint8_t ch_idx, const volatile uint16_t *adc_buf, uint16_t *mag_out)
 {
     for (uint8_t i = 0; i < FFT_N; i++) {
-        work_re[i] = (int16_t)calib_raw_to_mv(ch_idx, adc_buf[i]); // 대략 -5000~5000 범위, int16 여유있게 들어감
+        work_re[i] = (int16_t)calib_raw_to_mv(ch_idx, adc_buf[i]);
         work_im[i] = 0;
     }
 
     bit_reverse();
 
-    // 반복형 Cooley-Tukey(DIT). 스테이지마다 결과를 절반으로 스케일해서(>>1) 오버플로 방지 -
-    // 버터플라이 덧셈이 매 스테이지 최대 2배까지 커질 수 있는데 이러면 6스테이지 누적시
-    // int16 범위를 넘어감. 절댓값이 아니라 "상대적 진폭"만 필요해서 스케일 손실은 무해함.
+    // 반복형 Cooley-Tukey(DIT). 스테이지마다 결과를 절반으로 스케일(>>1)해서 오버플로 방지 -
+    // 절댓값이 아니라 상대적 진폭만 필요하므로 스케일 손실은 무해함.
     for (uint8_t stage = 0; stage < FFT_STAGES; stage++) {
         uint8_t half_size = (uint8_t)(1 << stage);
-        uint8_t tw_step = (uint8_t)(FFT_BINS >> stage); // 트위들 인덱스 간격
+        uint8_t tw_step = (uint8_t)(FFT_BINS >> stage);
 
         for (uint8_t start = 0; start < FFT_N; start = (uint8_t)(start + (half_size << 1))) {
             for (uint8_t k = 0; k < half_size; k++) {

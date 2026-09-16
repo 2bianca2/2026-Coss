@@ -30,7 +30,6 @@ void grid_draw_region(const scope_region_t *r)
         lcd_fill_rect(0, y, LCD_WIDTH - 1, y, COLOR_GRID);
     }
 
-    // 중앙 기준선은 조금 더 밝게 (0V / 가로 중앙 기준)
     uint16_t midx = vline_x(GRID_H_DIVS / 2);
     uint16_t midy = hline_y(r, r->v_divs / 2);
     lcd_fill_rect(midx, r->y0, midx, r->y1, COLOR_LTGREY);
